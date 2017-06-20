@@ -19,6 +19,13 @@ function init(shipit) {
       workspace: './deploy',
       deployTo: '/opt/deploy_to',
       ignores: ['.git', 'node_modules'],
+      sharedLinks: [{
+        name: 'node_modules',
+        type: 'directory'
+      }, {
+        name: 'config.production.json',
+        type: 'file'
+      }]
     },
     staging: {
       servers: '<user>@<server>'
