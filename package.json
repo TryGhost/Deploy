@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ship": "np"
   },
   "author": "Ghost Foundation",
   "license": "MIT",
@@ -12,5 +13,8 @@
     "chalk": "^1.1.3",
     "lodash": "^4.17.4",
     "shipit-cli": "^3.0.0"
+  },
+  "devDependencies": {
+    "np": "2.19.0"
   }
 }
