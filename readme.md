@@ -1,4 +1,4 @@
-# ghost-deploy
+# Deploy
 
 Set of deployment tasks for Shipit in combination with internal Ghost projects.
 
