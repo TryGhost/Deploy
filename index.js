@@ -1,3 +1,3 @@
 module.exports = function (shipit) {
-  require('./lib/deploy')(shipit);
+    require('./lib/deploy')(shipit);
 };
