@@ -108,3 +108,9 @@ module.exports = init;
 
 Use cases for events are for example database migrations that are executed after deploying new code.
 
+## Development
+### Testing
+- `yarn lint` runs eslint
+
+### Publish
+- `yarn ship`
