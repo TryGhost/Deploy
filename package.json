@@ -1,6 +1,6 @@
 {
   "name": "@tryghost/deploy",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "repository": "https://github.com/TryGhost/Deploy",
   "main": "index.js",
   "scripts": {
