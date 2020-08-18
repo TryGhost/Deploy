@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "3.5.0",
-    "chalk": "2.3.2",
+    "chalk": "4.1.0",
     "lodash": "4.17.19",
     "shipit-cli": "5.1.0"
   },
