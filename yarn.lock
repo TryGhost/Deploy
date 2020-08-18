@@ -194,9 +194,10 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
-bluebird@^3.5.0:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
+bluebird@3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
+  integrity sha1-eRQg1/VR7qKJdFOop3ZT+WYG1nw=
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -1871,7 +1872,7 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
 
-shipit-cli@^5.1.0:
+shipit-cli@5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/shipit-cli/-/shipit-cli-5.1.0.tgz#d653d165f5cdba15af593e78a29ed4e279c2c6a6"
   integrity sha512-nSMDs34fYtnh2HL3hZkiDXRHQPcpcDBDBIfjWbliyTJmyRgn2W/Ill3Jj7LBaH9EsyugUAB/2dcOkIB8vO9y/w==
