@@ -18,6 +18,6 @@
   },
   "devDependencies": {
     "eslint": "4.18.2",
-    "eslint-plugin-ghost": "1.0.0"
+    "eslint-plugin-ghost": "2.16.0"
   }
 }
