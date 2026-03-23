@@ -16,5 +16,8 @@ chown -R deploy:deploy /home/deploy/.ssh
 chmod 700 /home/deploy/.ssh
 chmod 600 /home/deploy/.ssh/authorized_keys
 
+# Ensure deploy user owns the deploy target
+chown deploy:deploy /opt/deploy_to
+
 # Start sshd in foreground
 exec /usr/sbin/sshd -D -e

@@ -32,6 +32,9 @@ for i in $(seq 1 30); do
     sleep 1
 done
 
+# Clean up previous deploy output
+ssh deploy@target "rm -rf /opt/deploy_to/{releases,current,shared}"
+
 # Install project dependencies
 cd /app
 yarn install --frozen-lockfile 2>&1
