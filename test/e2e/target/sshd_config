@@ -1,0 +1,6 @@
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
+AuthorizedKeysFile .ssh/authorized_keys
+StrictModes no
+Subsystem sftp /usr/lib/openssh/sftp-server

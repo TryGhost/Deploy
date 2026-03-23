@@ -1,0 +1,22 @@
+services:
+  target:
+    build: ./target
+    hostname: target
+    volumes:
+      - ssh-keys:/ssh-keys
+
+  runner:
+    build: ./runner
+    depends_on:
+      target:
+        condition: service_started
+    volumes:
+      - ../../:/app
+      - ssh-keys:/ssh-keys:ro
+    environment:
+      - DEPLOY_USER=deploy
+      - DEPLOY_SERVERS=target
+    command: bash /app/test/e2e/run-test.sh
+
+volumes:
+  ssh-keys:
