@@ -1,4 +1,4 @@
-var deploy = require('/app/index.js');
+const deploy = require('/app/index.js');
 
 module.exports = function (shipit) {
     deploy(shipit);

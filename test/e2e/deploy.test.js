@@ -1,8 +1,8 @@
-var Shipit = require('shipit-cli');
-var {execSync} = require('child_process');
-var assert = require('assert');
+const Shipit = require('shipit-cli');
+const {execSync} = require('child_process');
+const assert = require('assert');
 
-var DEPLOY_TO = '/opt/deploy_to';
+const DEPLOY_TO = '/opt/deploy_to';
 
 function remote(cmd) {
     return execSync('ssh deploy@target "' + cmd + '"', {encoding: 'utf8'}).trim();
@@ -17,7 +17,7 @@ describe('Deploy', function () {
 
         // Run the deploy
         process.env.NO_RESTART = 'false';
-        var shipit = new Shipit({environment: 'production'});
+        const shipit = new Shipit({environment: 'production'});
         require('./fixtures/shipitfile')(shipit);
         shipit.initialize();
         shipit.start('deploy', done);
@@ -29,7 +29,7 @@ describe('Deploy', function () {
         });
 
         it('creates exactly one release', function () {
-            var count = remote('ls ' + DEPLOY_TO + '/releases | wc -l');
+            const count = remote('ls ' + DEPLOY_TO + '/releases | wc -l');
             assert.equal(count, '1');
         });
     });
@@ -40,7 +40,7 @@ describe('Deploy', function () {
         });
 
         it('points into the releases directory', function () {
-            var target = remote('readlink ' + DEPLOY_TO + '/current');
+            const target = remote('readlink ' + DEPLOY_TO + '/current');
             assert.ok(target.includes(DEPLOY_TO + '/releases/'), 'Expected symlink to point into releases, got: ' + target);
         });
     });
@@ -69,7 +69,7 @@ describe('Deploy', function () {
         });
 
         it('has the correct package.json content', function () {
-            var content = remote('cat ' + DEPLOY_TO + '/current/package.json');
+            const content = remote('cat ' + DEPLOY_TO + '/current/package.json');
             assert.ok(content.includes('test-deploy-target'), 'Expected package.json to contain "test-deploy-target"');
         });
     });
