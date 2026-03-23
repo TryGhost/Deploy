@@ -68,3 +68,4 @@ typings/
 .DS_Store
 
 # Deploy Custom
+test/e2e/fixtures/output/

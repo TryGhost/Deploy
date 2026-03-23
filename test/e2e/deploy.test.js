@@ -1,3 +1,4 @@
+var Shipit = require('shipit-cli');
 var {execSync} = require('child_process');
 var assert = require('assert');
 
@@ -10,16 +11,16 @@ function remote(cmd) {
 describe('Deploy', function () {
     this.timeout(120000);
 
-    before(function () {
+    before(function (done) {
         // Create shared directory and config file on target
         remote('mkdir -p ' + DEPLOY_TO + '/shared && touch ' + DEPLOY_TO + '/shared/config.production.json');
 
         // Run the deploy
         process.env.NO_RESTART = 'false';
-        execSync('npx shipit production deploy --shipitfile /app/test/e2e/fixtures/shipitfile.js', {
-            cwd: '/app',
-            stdio: 'inherit'
-        });
+        var shipit = new Shipit({environment: 'production'});
+        require('./fixtures/shipitfile')(shipit);
+        shipit.initialize();
+        shipit.start('deploy', done);
     });
 
     describe('Release structure', function () {

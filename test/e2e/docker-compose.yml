@@ -4,6 +4,7 @@ services:
     hostname: target
     volumes:
       - ssh-keys:/ssh-keys
+      - ./fixtures/output:/opt/deploy_to
 
   runner:
     build: ./runner
