@@ -18,6 +18,6 @@
   "devDependencies": {
     "eslint": "4.18.2",
     "eslint-plugin-ghost": "1.0.0",
-    "mocha": "10.8.2"
+    "mocha": "11.7.5"
   }
 }
