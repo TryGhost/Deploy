@@ -12,7 +12,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc",
     "typecheck": "tsc --noEmit",
-    "lint": "oxlint && oxfmt --check .",
+    "lint": "oxlint --quiet && oxfmt --check .",
     "lint:fix": "oxlint --fix && oxfmt .",
     "format": "oxfmt .",
     "test:unit": "vitest run --coverage",
