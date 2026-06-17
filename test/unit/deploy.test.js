@@ -100,6 +100,53 @@ describe('lib/deploy', function () {
         expect(remote).toContain('restart.txt');
     });
 
+    it('installs production deps with pnpm when packageManager is "pnpm"', async function () {
+        process.env.NO_RESTART = 'true';
+        const {shipit, calls, tasks} = createShipit(baseConfig({packageManager: 'pnpm'}));
+        deploy(shipit);
+
+        await tasks.deploy();
+
+        const remote = calls.remote.join('\n');
+        // pnpm's production flag is --prod, not the --production npm/yarn use.
+        expect(remote).toContain('pnpm install --prod');
+        expect(remote).not.toContain('--production');
+    });
+
+    it('installs all deps with pnpm when packageManager is "pnpm" and allDeps is set', async function () {
+        process.env.NO_RESTART = 'true';
+        const {shipit, calls, tasks} = createShipit(baseConfig({packageManager: 'pnpm', allDeps: true}));
+        deploy(shipit);
+
+        await tasks.deploy();
+
+        const remote = calls.remote.join('\n');
+        expect(/pnpm install(?! --prod)/.test(remote)).toBe(true);
+    });
+
+    it('lets an explicit packageManager take precedence over the legacy npm flag', async function () {
+        process.env.NO_RESTART = 'true';
+        const {shipit, calls, tasks} = createShipit(baseConfig({packageManager: 'yarn', npm: true}));
+        deploy(shipit);
+
+        await tasks.deploy();
+
+        const remote = calls.remote.join('\n');
+        expect(remote).toContain('yarn install --production');
+        expect(remote).not.toContain('npm install');
+    });
+
+    it('fails the deploy up front for an unknown packageManager', async function () {
+        process.env.NO_RESTART = 'true';
+        const {shipit, calls, tasks} = createShipit(baseConfig({packageManager: 'bun'}));
+        deploy(shipit);
+
+        await expect(tasks.deploy()).rejects.toThrow(/Unknown packageManager "bun"/);
+        // Resolved before any remote work, so nothing was copied to the server.
+        expect(calls.remoteCopy).toHaveLength(0);
+        expect(calls.remote).toHaveLength(0);
+    });
+
     it('creates shared directories only for directory links and honours custom link targets', async function () {
         process.env.NO_RESTART = 'true';
         const config = baseConfig({

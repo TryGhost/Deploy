@@ -46,6 +46,40 @@ And add a new script to your package.json file:
   },
 ```
 
+# Package manager
+
+By default the deploy runs `yarn install --production` on the server. Choose a
+different package manager with the `packageManager` config option:
+
+```
+shipit.initConfig({
+  default: {
+    // ...
+    packageManager: 'pnpm' // 'yarn' (default) | 'npm' | 'pnpm'
+  }
+});
+```
+
+- `yarn` (default) and `npm` ship with Node, so they are always present on the
+  server. The legacy `npm: true` flag still works (equivalent to
+  `packageManager: 'npm'`); `packageManager` takes precedence if both are set.
+- `pnpm` is **not** bundled with Node — the server must provide it (e.g. via
+  Corepack or a global install), otherwise the deploy fails.
+- `allDeps: true` installs dev dependencies too (drops the production-only flag:
+  `--production` for yarn/npm, `--prod` for pnpm).
+
+### pnpm and `sharedLinks`
+
+Do **not** list `node_modules` in `sharedLinks` when using pnpm. pnpm cannot
+install into a symlinked `node_modules` (it fails with `ENOTDIR`), and its
+content-addressable store already hardlink-dedupes packages across releases, so
+sharing `node_modules` is both unsupported and unnecessary. Share only files
+such as config:
+
+```
+sharedLinks: [{name: 'config.production.json', type: 'file'}]
+```
+
 # Usage
 
 ## Deploy

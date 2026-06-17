@@ -171,3 +171,37 @@ describe('Deploy with npm (shipit.config.npm = true)', function () {
         remote('test ! -f ' + NPM_DEPLOY_TO + '/current/yarn.lock');
     });
 });
+
+// The pnpm branch of the same package-manager selector. pnpm is the runtime
+// option consumers migrating to pnpm need (GVA-795); unlike npm and yarn it is
+// not bundled with Node, so the target image provisions it (see target image).
+describe('Deploy with pnpm (shipit.config.packageManager = "pnpm")', function () {
+    const PNPM_DEPLOY_TO = '/home/deploy/deploy_to_pnpm';
+
+    beforeAll(async function () {
+        remote('mkdir -p ' + PNPM_DEPLOY_TO + '/shared && touch ' + PNPM_DEPLOY_TO + '/shared/config.production.json');
+
+        process.env.NO_RESTART = 'false';
+        await runDeploy({
+            packageManager: 'pnpm',
+            deployTo: PNPM_DEPLOY_TO,
+            // pnpm cannot install into a symlinked node_modules — it runs
+            // `mkdir node_modules` and fails with ENOTDIR — and its global
+            // store already hardlink-dedupes packages across releases, so the
+            // shared-node_modules optimisation is both unusable and redundant
+            // for pnpm. pnpm consumers therefore omit node_modules from
+            // sharedLinks (documented in the README).
+            sharedLinks: [{name: 'config.production.json', type: 'file'}]
+        });
+    });
+
+    it('installs lodash so the deployed app can resolve it', function () {
+        remote('test -d ' + PNPM_DEPLOY_TO + '/current/node_modules/lodash');
+    });
+
+    it('runs pnpm (writes pnpm-lock.yaml, no package-lock.json or yarn.lock)', function () {
+        remote('test -f ' + PNPM_DEPLOY_TO + '/current/pnpm-lock.yaml');
+        remote('test ! -f ' + PNPM_DEPLOY_TO + '/current/package-lock.json');
+        remote('test ! -f ' + PNPM_DEPLOY_TO + '/current/yarn.lock');
+    });
+});
