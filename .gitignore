@@ -66,3 +66,6 @@ typings/
 
 # Deploy Custom
 test/e2e/fixtures/output/
+
+# Build output
+dist/

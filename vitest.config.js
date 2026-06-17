@@ -6,7 +6,7 @@ module.exports = defineConfig({
         include: ['test/unit/**/*.test.js'],
         coverage: {
             provider: 'v8',
-            include: ['index.js', 'lib/**/*.js'],
+            include: ['index.ts', 'lib/**/*.ts'],
             reporter: ['text', 'text-summary'],
             thresholds: {
                 lines: 80,

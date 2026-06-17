@@ -6,12 +6,11 @@ Set of deployment tasks for Shipit in combination with internal Ghost projects.
 
 Install this package:
 
-`npm install @tryghost/deploy` (or `yarn add` / `pnpm add`)
+`pnpm add @tryghost/deploy` (or `npm install @tryghost/deploy` / `yarn add @tryghost/deploy`)
 
-> Requires Node.js >= 20.20.0. The services this tool deploys (`daisy.js`,
-> `zuul`, `stats-service`, and other Jenkins-deployed projects) run on Node
-> 20.20.0 on the core server, so that is the minimum runtime the plugin keeps
-> working on; CI also tests 22 and 24.
+> Requires **Node.js >= 20.20.0** (CI also tests 22 and 24). Projects that still
+> deploy from an older Node runtime must upgrade to 20.20.0+ before they can use
+> a current version of this package.
 
 Add a `shipitfile.js` config with the following content. Keep in mind that it is never a good idea to commit private credentials to git. Private settings could for example be provided by using environment variables (`process.env.ENV_VARIABLE`).
 
@@ -151,14 +150,17 @@ Use cases for events are for example database migrations that are executed after
 
 ## Development
 
-### Testing
+This package is written in TypeScript (`index.ts`, `lib/*.ts`) and compiled to
+CommonJS in `dist/`, which is what gets published.
 
+- `pnpm build` compiles to `dist/`; `pnpm typecheck` type-checks without emitting
 - `pnpm lint` runs oxlint and checks formatting with oxfmt
 - `pnpm lint:fix` autofixes lint issues and reformats
+- `pnpm test` runs lint, type-check, and the unit suite
 
 ### Publish
 
-- `pnpm ship`
+- `pnpm ship` (builds via `prepublishOnly`, then publishes `dist/`)
 
 # Copyright & License
 

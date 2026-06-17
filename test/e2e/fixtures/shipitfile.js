@@ -1,4 +1,6 @@
-const deploy = require('/app/index.js');
+// Require the built output, exactly as a consumer of the published package
+// would — the e2e exercises dist/, not the TypeScript source.
+const deploy = require('/app/dist/index.js');
 
 module.exports = function (shipit, configOverrides = {}) {
     deploy(shipit);

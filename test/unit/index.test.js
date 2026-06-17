@@ -1,4 +1,4 @@
-const deployPlugin = require('../../index');
+import deployPlugin from '../../index';
 
 describe('index', function () {
     describe('main export', function () {
