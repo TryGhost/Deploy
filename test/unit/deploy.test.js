@@ -147,6 +147,14 @@ describe('lib/deploy', function () {
         expect(calls.remote).toHaveLength(0);
     });
 
+    it('treats an explicitly empty packageManager as invalid rather than falling back', async function () {
+        process.env.NO_RESTART = 'true';
+        const {shipit, tasks} = createShipit(baseConfig({packageManager: ''}));
+        deploy(shipit);
+
+        await expect(tasks.deploy()).rejects.toThrow(/Unknown packageManager/);
+    });
+
     it('creates shared directories only for directory links and honours custom link targets', async function () {
         process.env.NO_RESTART = 'true';
         const config = baseConfig({

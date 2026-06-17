@@ -60,11 +60,13 @@ shipit.initConfig({
 });
 ```
 
-- `yarn` (default) and `npm` ship with Node, so they are always present on the
-  server. The legacy `npm: true` flag still works (equivalent to
-  `packageManager: 'npm'`); `packageManager` takes precedence if both are set.
-- `pnpm` is **not** bundled with Node — the server must provide it (e.g. via
-  Corepack or a global install), otherwise the deploy fails.
+- `npm` is bundled with Node, so it is always present on the server. `yarn`
+  (the default) is not part of Node but is commonly preinstalled (e.g. in the
+  official Node Docker images); `pnpm` usually is not. Whichever manager you
+  choose must be available on the server, or the install step fails (Corepack or
+  a global install can provide yarn/pnpm). The legacy `npm: true` flag still
+  works (equivalent to `packageManager: 'npm'`); `packageManager` takes
+  precedence if both are set.
 - `allDeps: true` installs dev dependencies too (drops the production-only flag:
   `--production` for yarn/npm, `--prod` for pnpm).
 
