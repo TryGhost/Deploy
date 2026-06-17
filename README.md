@@ -6,13 +6,18 @@ Set of deployment tasks for Shipit in combination with internal Ghost projects.
 
 Install this package:
 
-`npm install @tryghost/deploy --save`
+`npm install @tryghost/deploy` (or `yarn add` / `pnpm add`)
+
+> Requires Node.js >= 20.20.0. The services this tool deploys (`daisy.js`,
+> `zuul`, `stats-service`, and other Jenkins-deployed projects) run on Node
+> 20.20.0 on the core server, so that is the minimum runtime the plugin keeps
+> working on; CI also tests 22 and 24.
 
 Add a `shipitfile.js` config with the following content. Keep in mind that it is never a good idea to commit private credentials to git. Private settings could for example be provided by using environment variables (`process.env.ENV_VARIABLE`).
 
 ```
 function init(shipit) {
-  require('ghost-deploy')(shipit);
+  require('@tryghost/deploy')(shipit);
 
   shipit.initConfig({
     default: {
@@ -87,11 +92,14 @@ sharedLinks: [{name: 'config.production.json', type: 'file'}]
 
 ## Deploy
 
-To deploy a project to the server configured as staging execute the following command:
-
-`yarn deploy <environment>`
+To deploy a project to a configured environment, run the `deploy` script with your
+package manager — `yarn deploy <environment>`, `npm run deploy <environment>`, or
+`pnpm run deploy <environment>`.
 
 Example: `yarn deploy staging`
+
+> With pnpm, use `pnpm run deploy`, not `pnpm deploy` — the latter is a built-in
+> pnpm command and will not run your script.
 
 ## Custom Tasks
 
@@ -99,7 +107,7 @@ If you need special tasks within your project it is possible to add new task in 
 
 ```
 function init(shipit) {
-  require('ghost-deploy')(shipit);
+  require('@tryghost/deploy')(shipit);
 
   ...
 
@@ -111,13 +119,9 @@ function init(shipit) {
 module.exports = init;
 ```
 
-You would then execute this task using
-
-`yarn deploy <environment> <task>`
-
-E.g.
-
-`yarn deploy staging pwd`
+You would then execute this task by passing its name as an argument, e.g.
+`yarn deploy staging pwd` (or `npm run deploy staging pwd` /
+`pnpm run deploy staging pwd`).
 
 (Note: deploy is the default task, so by default you don't have to provide a task)
 
@@ -158,4 +162,4 @@ Use cases for events are for example database migrations that are executed after
 
 # Copyright & License
 
-Copyright (c) 2013-2023 Ghost Foundation - Released under the [MIT license](LICENSE). Ghost and the Ghost Logo are trademarks of Ghost Foundation Ltd. Please see our [trademark policy](https://ghost.org/trademark/) for info on acceptable usage.
+Copyright (c) 2013-2026 Ghost Foundation - Released under the [MIT license](LICENSE). Ghost and the Ghost Logo are trademarks of Ghost Foundation Ltd. Please see our [trademark policy](https://ghost.org/trademark/) for info on acceptable usage.
