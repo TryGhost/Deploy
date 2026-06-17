@@ -1,6 +1,5 @@
 const Shipit = require('shipit-cli');
 const {execSync} = require('child_process');
-const assert = require('assert');
 
 const DEPLOY_TO = '/opt/deploy_to';
 
@@ -8,19 +7,29 @@ function remote(cmd) {
     return execSync('ssh deploy@target "' + cmd + '"', {encoding: 'utf8'}).trim();
 }
 
-describe('Deploy', function () {
-    this.timeout(120000);
+function runDeploy() {
+    return new Promise(function (resolve, reject) {
+        const shipit = new Shipit({environment: 'production'});
+        require('./fixtures/shipitfile')(shipit);
+        shipit.initialize();
+        shipit.start('deploy', function (err) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
 
-    before(function (done) {
+describe('Deploy', function () {
+    beforeAll(async function () {
         // Create shared directory and config file on target
         remote('mkdir -p ' + DEPLOY_TO + '/shared && touch ' + DEPLOY_TO + '/shared/config.production.json');
 
         // Run the deploy
         process.env.NO_RESTART = 'false';
-        const shipit = new Shipit({environment: 'production'});
-        require('./fixtures/shipitfile')(shipit);
-        shipit.initialize();
-        shipit.start('deploy', done);
+        await runDeploy();
     });
 
     describe('Release structure', function () {
@@ -30,7 +39,7 @@ describe('Deploy', function () {
 
         it('creates exactly one release', function () {
             const count = remote('ls ' + DEPLOY_TO + '/releases | wc -l');
-            assert.equal(count, '1');
+            expect(count).toBe('1');
         });
     });
 
@@ -41,7 +50,7 @@ describe('Deploy', function () {
 
         it('points into the releases directory', function () {
             const target = remote('readlink ' + DEPLOY_TO + '/current');
-            assert.ok(target.includes(DEPLOY_TO + '/releases/'), 'Expected symlink to point into releases, got: ' + target);
+            expect(target).toContain(DEPLOY_TO + '/releases/');
         });
     });
 
@@ -70,7 +79,7 @@ describe('Deploy', function () {
 
         it('has the correct package.json content', function () {
             const content = remote('cat ' + DEPLOY_TO + '/current/package.json');
-            assert.ok(content.includes('test-deploy-target'), 'Expected package.json to contain "test-deploy-target"');
+            expect(content).toContain('test-deploy-target');
         });
     });
 
@@ -97,34 +106,31 @@ describe('Deploy', function () {
     });
 
     describe('Release clean-up', function () {
-        before(function (done) {
+        beforeAll(async function () {
             // Create 12 fake old releases (prefixed with 0 so they sort before real ones)
             // After deploying: 12 fake + 1 existing + 1 new = 14 total
             // Clean-up removes the 4 oldest, leaving 10
-            for (var i = 0; i < 12; i++) {
+            for (let i = 0; i < 12; i++) {
                 remote('mkdir -p ' + DEPLOY_TO + '/releases/0000-fake-release-' + String(i).padStart(2, '0'));
             }
 
             // Deploy again
-            var shipit = new Shipit({environment: 'production'});
-            require('./fixtures/shipitfile')(shipit);
-            shipit.initialize();
-            shipit.start('deploy', done);
+            await runDeploy();
         });
 
         it('keeps no more than 10 releases', function () {
-            var count = remote('ls ' + DEPLOY_TO + '/releases | wc -l');
-            assert.equal(count, '10');
+            const count = remote('ls ' + DEPLOY_TO + '/releases | wc -l');
+            expect(count).toBe('10');
         });
 
         it('removes the oldest releases first', function () {
-            var releases = remote('ls ' + DEPLOY_TO + '/releases');
+            const releases = remote('ls ' + DEPLOY_TO + '/releases');
             // The 4 oldest fakes (00-03) should be gone
-            assert.ok(!releases.includes('0000-fake-release-00'), 'Expected oldest fake release to be removed');
-            assert.ok(!releases.includes('0000-fake-release-03'), 'Expected 4th oldest fake release to be removed');
+            expect(releases).not.toContain('0000-fake-release-00');
+            expect(releases).not.toContain('0000-fake-release-03');
             // The 8 newest fakes (04-11) should still be present
-            assert.ok(releases.includes('0000-fake-release-04'), 'Expected 5th fake release to be kept');
-            assert.ok(releases.includes('0000-fake-release-11'), 'Expected newest fake release to be kept');
+            expect(releases).toContain('0000-fake-release-04');
+            expect(releases).toContain('0000-fake-release-11');
         });
 
         it('keeps the current symlink valid', function () {

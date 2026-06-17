@@ -40,4 +40,4 @@ cd /app
 yarn install --frozen-lockfile 2>&1
 
 # Run the tests
-npx mocha test/e2e/deploy.test.js --timeout 120000
+npx vitest run --config vitest.e2e.config.js
