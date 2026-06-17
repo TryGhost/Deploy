@@ -1,0 +1,8 @@
+# pnpm settings (pnpm >= 10 reads build-script settings here, not from
+# package.json). This repo is a single package, not a workspace.
+#
+# esbuild ships a native binary built by its install script and vitest needs
+# it, so its build is allowed. Every other dependency build script stays
+# blocked by pnpm's secure default.
+allowBuilds:
+  esbuild: true
