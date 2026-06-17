@@ -61,6 +61,12 @@ pnpm test:e2e             # full deploy against throwaway Docker containers
 
 ## Publishing
 
-`pnpm ship` runs the tests then `pnpm publish && git push --follow-tags`. Unlike
-the old `yarn publish`, `pnpm publish` does **not** bump the version — run
-`pnpm version <patch|minor|major>` first (it writes the tag), then `pnpm ship`.
+`pnpm publish` does **not** choose the version (unlike the old `yarn publish`),
+so a release is two steps: **`pnpm version <patch|minor|major>`** (or an exact
+version) then **`pnpm ship`** — the bump type is the only thing that changes
+between patch/minor/major releases. `pnpm version` runs `pnpm test` via the
+`preversion` hook and **aborts the bump if tests fail** (no stranded version
+commit/tag); on success it bumps `package.json`, commits, and tags `vX.Y.Z`.
+`pnpm ship` then builds, `pnpm publish`es `dist/`, and `git push --follow-tags`
+pushes the commit + tag to `main` — allowed by the Ghost Foundation ruleset
+bypass (`always`).
