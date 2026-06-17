@@ -1,10 +1,10 @@
 const deploy = require('/app/index.js');
 
-module.exports = function (shipit) {
+module.exports = function (shipit, configOverrides = {}) {
     deploy(shipit);
 
     shipit.initConfig({
-        default: {
+        default: Object.assign({
             workspace: '/app/test/e2e/fixtures/test-project',
             deployTo: '/opt/deploy_to',
             ignores: ['.git', 'node_modules'],
@@ -15,7 +15,7 @@ module.exports = function (shipit) {
                 name: 'config.production.json',
                 type: 'file'
             }]
-        },
+        }, configOverrides),
         production: {
             servers: deploy.getServerList()
         }

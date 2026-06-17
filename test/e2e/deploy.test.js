@@ -7,10 +7,10 @@ function remote(cmd) {
     return execSync('ssh deploy@target "' + cmd + '"', {encoding: 'utf8'}).trim();
 }
 
-function runDeploy() {
+function runDeploy(configOverrides) {
     return new Promise(function (resolve, reject) {
         const shipit = new Shipit({environment: 'production'});
-        require('./fixtures/shipitfile')(shipit);
+        require('./fixtures/shipitfile')(shipit, configOverrides);
         shipit.initialize();
         shipit.start('deploy', function (err) {
             if (err) {
@@ -136,5 +136,38 @@ describe('Deploy', function () {
         it('keeps the current symlink valid', function () {
             remote('test -d ' + DEPLOY_TO + '/current');
         });
+    });
+});
+
+// The deploy runtime picks the package manager from shipit.config.npm:
+// `npm install` when true, `yarn install` (the default) otherwise — see
+// lib/deploy.js. The suite above exercises the default yarn branch end to
+// end; this one proves the npm branch actually installs on a real target,
+// so a dependency bump or runtime change that breaks it fails CI instead of
+// being silently auto-merged.
+describe('Deploy with npm (shipit.config.npm = true)', function () {
+    // Under the deploy user's own home so it can be created without the extra
+    // /opt provisioning the default-path deployTo gets in the target image.
+    const NPM_DEPLOY_TO = '/home/deploy/deploy_to_npm';
+
+    beforeAll(async function () {
+        // Isolated deployTo so this does not disturb the default-path deploy.
+        remote('mkdir -p ' + NPM_DEPLOY_TO + '/shared && touch ' + NPM_DEPLOY_TO + '/shared/config.production.json');
+
+        process.env.NO_RESTART = 'false';
+        await runDeploy({npm: true, deployTo: NPM_DEPLOY_TO});
+    });
+
+    it('installs lodash so the deployed app can resolve it', function () {
+        // Asserted via current/ rather than shared/: npm (unlike yarn) replaces
+        // the symlinked node_modules with a real directory in the release, so
+        // the shared-dir optimisation does not apply to the npm path. What
+        // matters is that the dependency is resolvable from the deployed app.
+        remote('test -d ' + NPM_DEPLOY_TO + '/current/node_modules/lodash');
+    });
+
+    it('runs npm rather than yarn (writes package-lock.json, no yarn.lock)', function () {
+        remote('test -f ' + NPM_DEPLOY_TO + '/current/package-lock.json');
+        remote('test ! -f ' + NPM_DEPLOY_TO + '/current/yarn.lock');
     });
 });
