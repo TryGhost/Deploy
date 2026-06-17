@@ -158,9 +158,20 @@ CommonJS in `dist/`, which is what gets published.
 - `pnpm lint:fix` autofixes lint issues and reformats
 - `pnpm test` runs lint, type-check, and the unit suite
 
-### Publish
+### Releasing
 
-- `pnpm ship` (builds via `prepublishOnly`, then publishes `dist/`)
+Pick the version bump and ship — same two commands for every release type:
+
+```sh
+pnpm version <patch|minor|major>   # or an exact version, e.g. pnpm version 1.2.3
+pnpm ship
+```
+
+- `pnpm version` runs the full test suite first (via the `preversion` hook) and
+  **aborts the bump if it fails**, so a broken build never cuts a version. On
+  success it updates `package.json`, commits, and tags `vX.Y.Z`.
+- `pnpm ship` builds (`prepublishOnly`), publishes `dist/`, and pushes the
+  version commit + tag to `main` with `git push --follow-tags`.
 
 # Copyright & License
 
