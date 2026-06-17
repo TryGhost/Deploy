@@ -35,9 +35,10 @@ done
 # Clean up previous deploy output
 ssh deploy@target "rm -rf /opt/deploy_to/{releases,current,shared}"
 
-# Install project dependencies
+# Install project dependencies and build the package (the e2e runs against dist/)
 cd /app
 pnpm install --frozen-lockfile 2>&1
+pnpm build 2>&1
 
 # Run the tests
 pnpm exec vitest run --config vitest.e2e.config.js

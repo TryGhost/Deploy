@@ -1,4 +1,4 @@
-const deploy = require('../../lib/deploy');
+import deploy from '../../lib/deploy';
 
 function createShipit(config) {
     const calls = { remote: [], remoteCopy: [], log: [], emit: [] };

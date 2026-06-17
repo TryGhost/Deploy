@@ -8,6 +8,7 @@
     "node": true,
     "es2024": true
   },
+  "ignorePatterns": ["dist"],
   "rules": {
     "no-console": "error"
   },

@@ -152,7 +152,7 @@ describe('Deploy', function () {
 
 // The deploy runtime picks the package manager from shipit.config.npm:
 // `npm install` when true, `yarn install` (the default) otherwise — see
-// lib/deploy.js. The suite above exercises the default yarn branch end to
+// lib/deploy.ts. The suite above exercises the default yarn branch end to
 // end; this one proves the npm branch actually installs on a real target,
 // so a dependency bump or runtime change that breaks it fails CI instead of
 // being silently auto-merged.
