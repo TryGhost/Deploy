@@ -1,0 +1,10 @@
+# pnpm settings live here: pnpm >= 10 reads build-script settings from
+# pnpm-workspace.yaml rather than from package.json's "pnpm" key. There are
+# no additional workspace packages — this file exists solely to configure
+# allowed build scripts.
+#
+# esbuild ships a native binary built by its install script and vitest needs
+# it, so its build is allowed. Every other dependency build script stays
+# blocked by pnpm's secure default.
+allowBuilds:
+  esbuild: true

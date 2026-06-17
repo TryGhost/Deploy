@@ -37,7 +37,7 @@ ssh deploy@target "rm -rf /opt/deploy_to/{releases,current,shared}"
 
 # Install project dependencies
 cd /app
-yarn install --frozen-lockfile 2>&1
+pnpm install --frozen-lockfile 2>&1
 
 # Run the tests
-npx vitest run --config vitest.e2e.config.js
+pnpm exec vitest run --config vitest.e2e.config.js

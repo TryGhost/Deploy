@@ -110,10 +110,10 @@ Use cases for events are for example database migrations that are executed after
 
 ## Development
 ### Testing
-- `yarn lint` runs eslint
+- `pnpm lint` runs eslint
 
 ### Publish
-- `yarn ship`
+- `pnpm ship`
 
 # Copyright & License
 
