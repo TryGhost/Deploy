@@ -9,7 +9,7 @@ describe('index', function () {
                 task(name) {
                     registered.push(name);
                 },
-                on() {}
+                on() {},
             };
 
             deployPlugin(shipit);

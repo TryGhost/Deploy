@@ -1,15 +1,15 @@
 const Shipit = require('shipit-cli');
-const {execSync} = require('child_process');
+const { execSync } = require('child_process');
 
 const DEPLOY_TO = '/opt/deploy_to';
 
 function remote(cmd) {
-    return execSync('ssh deploy@target "' + cmd + '"', {encoding: 'utf8'}).trim();
+    return execSync('ssh deploy@target "' + cmd + '"', { encoding: 'utf8' }).trim();
 }
 
 function runDeploy(configOverrides) {
     return new Promise(function (resolve, reject) {
-        const shipit = new Shipit({environment: 'production'});
+        const shipit = new Shipit({ environment: 'production' });
         require('./fixtures/shipitfile')(shipit, configOverrides);
         shipit.initialize();
         shipit.start('deploy', function (err) {
@@ -25,7 +25,13 @@ function runDeploy(configOverrides) {
 describe('Deploy', function () {
     beforeAll(async function () {
         // Create shared directory and config file on target
-        remote('mkdir -p ' + DEPLOY_TO + '/shared && touch ' + DEPLOY_TO + '/shared/config.production.json');
+        remote(
+            'mkdir -p ' +
+                DEPLOY_TO +
+                '/shared && touch ' +
+                DEPLOY_TO +
+                '/shared/config.production.json',
+        );
 
         // Run the deploy
         process.env.NO_RESTART = 'false';
@@ -111,7 +117,12 @@ describe('Deploy', function () {
             // After deploying: 12 fake + 1 existing + 1 new = 14 total
             // Clean-up removes the 4 oldest, leaving 10
             for (let i = 0; i < 12; i++) {
-                remote('mkdir -p ' + DEPLOY_TO + '/releases/0000-fake-release-' + String(i).padStart(2, '0'));
+                remote(
+                    'mkdir -p ' +
+                        DEPLOY_TO +
+                        '/releases/0000-fake-release-' +
+                        String(i).padStart(2, '0'),
+                );
             }
 
             // Deploy again
@@ -152,10 +163,16 @@ describe('Deploy with npm (shipit.config.npm = true)', function () {
 
     beforeAll(async function () {
         // Isolated deployTo so this does not disturb the default-path deploy.
-        remote('mkdir -p ' + NPM_DEPLOY_TO + '/shared && touch ' + NPM_DEPLOY_TO + '/shared/config.production.json');
+        remote(
+            'mkdir -p ' +
+                NPM_DEPLOY_TO +
+                '/shared && touch ' +
+                NPM_DEPLOY_TO +
+                '/shared/config.production.json',
+        );
 
         process.env.NO_RESTART = 'false';
-        await runDeploy({npm: true, deployTo: NPM_DEPLOY_TO});
+        await runDeploy({ npm: true, deployTo: NPM_DEPLOY_TO });
     });
 
     it('installs lodash so the deployed app can resolve it', function () {
@@ -179,7 +196,13 @@ describe('Deploy with pnpm (shipit.config.packageManager = "pnpm")', function ()
     const PNPM_DEPLOY_TO = '/home/deploy/deploy_to_pnpm';
 
     beforeAll(async function () {
-        remote('mkdir -p ' + PNPM_DEPLOY_TO + '/shared && touch ' + PNPM_DEPLOY_TO + '/shared/config.production.json');
+        remote(
+            'mkdir -p ' +
+                PNPM_DEPLOY_TO +
+                '/shared && touch ' +
+                PNPM_DEPLOY_TO +
+                '/shared/config.production.json',
+        );
 
         process.env.NO_RESTART = 'false';
         await runDeploy({
@@ -191,7 +214,7 @@ describe('Deploy with pnpm (shipit.config.packageManager = "pnpm")', function ()
             // shared-node_modules optimisation is both unusable and redundant
             // for pnpm. pnpm consumers therefore omit node_modules from
             // sharedLinks (documented in the README).
-            sharedLinks: [{name: 'config.production.json', type: 'file'}]
+            sharedLinks: [{ name: 'config.production.json', type: 'file' }],
         });
     });
 
