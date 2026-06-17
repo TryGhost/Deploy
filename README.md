@@ -39,6 +39,7 @@ module.exports = init;
 ```
 
 And add a new script to your package.json file:
+
 ```
   "scripts": {
     ...,
@@ -90,7 +91,7 @@ To deploy a project to the server configured as staging execute the following co
 
 `yarn deploy <environment>`
 
-Example: `yarn deploy staging` 
+Example: `yarn deploy staging`
 
 ## Custom Tasks
 
@@ -145,13 +146,16 @@ module.exports = init;
 Use cases for events are for example database migrations that are executed after deploying new code.
 
 ## Development
+
 ### Testing
-- `pnpm lint` runs eslint
+
+- `pnpm lint` runs oxlint and checks formatting with oxfmt
+- `pnpm lint:fix` autofixes lint issues and reformats
 
 ### Publish
+
 - `pnpm ship`
 
 # Copyright & License
 
 Copyright (c) 2013-2023 Ghost Foundation - Released under the [MIT license](LICENSE). Ghost and the Ghost Logo are trademarks of Ghost Foundation Ltd. Please see our [trademark policy](https://ghost.org/trademark/) for info on acceptable usage.
-

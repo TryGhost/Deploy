@@ -1,7 +1,7 @@
 const deploy = require('../../lib/deploy');
 
 function createShipit(config) {
-    const calls = {remote: [], remoteCopy: [], log: [], emit: []};
+    const calls = { remote: [], remoteCopy: [], log: [], emit: [] };
     const tasks = {};
 
     const shipit = {
@@ -13,25 +13,28 @@ function createShipit(config) {
             calls.remote.push(cmd);
         },
         async remoteCopy(from, to, options) {
-            calls.remoteCopy.push({from, to, options});
+            calls.remoteCopy.push({ from, to, options });
         },
         log(message) {
             calls.log.push(message);
         },
         emit(event) {
             calls.emit.push(event);
-        }
+        },
     };
 
-    return {shipit, calls, tasks};
+    return { shipit, calls, tasks };
 }
 
 function baseConfig(overrides) {
-    return Object.assign({
-        deployTo: '/opt/deploy_to',
-        workspace: '/work',
-        sharedLinks: []
-    }, overrides);
+    return Object.assign(
+        {
+            deployTo: '/opt/deploy_to',
+            workspace: '/work',
+            sharedLinks: [],
+        },
+        overrides,
+    );
 }
 
 describe('lib/deploy', function () {
@@ -46,7 +49,7 @@ describe('lib/deploy', function () {
     });
 
     it('registers both deploy and default tasks', function () {
-        const {shipit, tasks} = createShipit(baseConfig());
+        const { shipit, tasks } = createShipit(baseConfig());
         deploy(shipit);
 
         expect(typeof tasks.deploy).toBe('function');
@@ -55,7 +58,7 @@ describe('lib/deploy', function () {
 
     it('builds the release structure and installs production deps with yarn by default', async function () {
         process.env.NO_RESTART = 'true';
-        const {shipit, calls, tasks} = createShipit(baseConfig());
+        const { shipit, calls, tasks } = createShipit(baseConfig());
         deploy(shipit);
 
         await tasks.deploy();
@@ -65,7 +68,7 @@ describe('lib/deploy', function () {
         expect(remote).toContain('ln -nfs');
         expect(remote).toContain('yarn install --production');
         expect(calls.remoteCopy).toHaveLength(1);
-        expect(calls.remoteCopy[0].options).toEqual({rsync: '--del'});
+        expect(calls.remoteCopy[0].options).toEqual({ rsync: '--del' });
         expect(calls.remoteCopy[0].from.startsWith('/work')).toBe(true);
         expect(calls.emit).toContain('deployed');
         expect(remote).not.toContain('restart.txt');
@@ -76,21 +79,21 @@ describe('lib/deploy', function () {
         const config = baseConfig({
             rsyncFrom: '/custom-src',
             dirToCopy: 'dist',
-            deploy: {remoteCopy: {rsync: '--archive'}}
+            deploy: { remoteCopy: { rsync: '--archive' } },
         });
-        const {shipit, calls, tasks} = createShipit(config);
+        const { shipit, calls, tasks } = createShipit(config);
         deploy(shipit);
 
         await tasks.deploy();
 
         expect(calls.remoteCopy[0].from).toContain('/custom-src/dist');
-        expect(calls.remoteCopy[0].options).toEqual({rsync: '--archive'});
+        expect(calls.remoteCopy[0].options).toEqual({ rsync: '--archive' });
     });
 
     it('installs all deps with npm and writes restart.txt when configured', async function () {
         process.env.NO_RESTART = 'false';
-        const config = baseConfig({npm: true, allDeps: true});
-        const {shipit, calls, tasks} = createShipit(config);
+        const config = baseConfig({ npm: true, allDeps: true });
+        const { shipit, calls, tasks } = createShipit(config);
         deploy(shipit);
 
         await tasks.deploy();
@@ -102,7 +105,7 @@ describe('lib/deploy', function () {
 
     it('installs production deps with pnpm when packageManager is "pnpm"', async function () {
         process.env.NO_RESTART = 'true';
-        const {shipit, calls, tasks} = createShipit(baseConfig({packageManager: 'pnpm'}));
+        const { shipit, calls, tasks } = createShipit(baseConfig({ packageManager: 'pnpm' }));
         deploy(shipit);
 
         await tasks.deploy();
@@ -115,7 +118,9 @@ describe('lib/deploy', function () {
 
     it('installs all deps with pnpm when packageManager is "pnpm" and allDeps is set', async function () {
         process.env.NO_RESTART = 'true';
-        const {shipit, calls, tasks} = createShipit(baseConfig({packageManager: 'pnpm', allDeps: true}));
+        const { shipit, calls, tasks } = createShipit(
+            baseConfig({ packageManager: 'pnpm', allDeps: true }),
+        );
         deploy(shipit);
 
         await tasks.deploy();
@@ -126,7 +131,9 @@ describe('lib/deploy', function () {
 
     it('lets an explicit packageManager take precedence over the legacy npm flag', async function () {
         process.env.NO_RESTART = 'true';
-        const {shipit, calls, tasks} = createShipit(baseConfig({packageManager: 'yarn', npm: true}));
+        const { shipit, calls, tasks } = createShipit(
+            baseConfig({ packageManager: 'yarn', npm: true }),
+        );
         deploy(shipit);
 
         await tasks.deploy();
@@ -138,7 +145,7 @@ describe('lib/deploy', function () {
 
     it('fails the deploy up front for an unknown packageManager', async function () {
         process.env.NO_RESTART = 'true';
-        const {shipit, calls, tasks} = createShipit(baseConfig({packageManager: 'bun'}));
+        const { shipit, calls, tasks } = createShipit(baseConfig({ packageManager: 'bun' }));
         deploy(shipit);
 
         await expect(tasks.deploy()).rejects.toThrow(/Unknown packageManager "bun"/);
@@ -149,7 +156,7 @@ describe('lib/deploy', function () {
 
     it('treats an explicitly empty packageManager as invalid rather than falling back', async function () {
         process.env.NO_RESTART = 'true';
-        const {shipit, tasks} = createShipit(baseConfig({packageManager: ''}));
+        const { shipit, tasks } = createShipit(baseConfig({ packageManager: '' }));
         deploy(shipit);
 
         await expect(tasks.deploy()).rejects.toThrow(/Unknown packageManager/);
@@ -159,12 +166,12 @@ describe('lib/deploy', function () {
         process.env.NO_RESTART = 'true';
         const config = baseConfig({
             sharedLinks: [
-                {name: 'node_modules', type: 'directory'},
-                {name: 'config.production.json', type: 'file'},
-                {name: 'logs', target: 'var/logs', type: 'directory'}
-            ]
+                { name: 'node_modules', type: 'directory' },
+                { name: 'config.production.json', type: 'file' },
+                { name: 'logs', target: 'var/logs', type: 'directory' },
+            ],
         });
-        const {shipit, calls, tasks} = createShipit(config);
+        const { shipit, calls, tasks } = createShipit(config);
         deploy(shipit);
 
         await tasks.deploy();

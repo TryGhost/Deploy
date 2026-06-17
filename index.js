@@ -8,8 +8,8 @@ module.exports.getServerList = function () {
 
     try {
         const parsedServers = JSON.parse(deployServers);
-        return parsedServers.map(item => deployUser + '@' + item);
-    } catch (e) {
+        return parsedServers.map((item) => deployUser + '@' + item);
+    } catch {
         return deployUser + '@' + deployServers;
     }
 };
