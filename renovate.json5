@@ -6,5 +6,12 @@
             matchPackageNames: ['pnpm'],
             allowedVersions: '<11',
         },
+        {
+            description: 'Keep CI runtime jobs pinned to Node 20.20.0; this is the lowest consumer runtime and must not drift to patch releases.',
+            matchManagers: ['github-actions'],
+            matchPackageNames: ['node'],
+            matchCurrentValue: '20.20.0',
+            allowedVersions: '20.20.0',
+        },
     ],
 }
