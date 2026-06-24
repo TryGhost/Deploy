@@ -5,7 +5,7 @@
   "author": "Ghost Foundation",
   "repository": "https://github.com/TryGhost/Deploy",
   "bin": {
-    "shipit": "./bin/shipit.js"
+    "shipit": "./dist/bin/shipit.js"
   },
   "files": [
     "dist"
