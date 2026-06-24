@@ -4,14 +4,14 @@
   "license": "MIT",
   "author": "Ghost Foundation",
   "repository": "https://github.com/TryGhost/Deploy",
+  "bin": {
+    "shipit": "./bin/shipit.js"
+  },
   "files": [
     "dist"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": {
-    "shipit": "./bin/shipit.js"
-  },
   "scripts": {
     "build": "rm -rf dist && tsc",
     "typecheck": "tsc --noEmit",
