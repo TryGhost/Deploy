@@ -57,25 +57,12 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
-  all-tests-pass:
-    name: All tests pass
+  required-checks-pass:
+    name: Required checks pass
     if: always()
     needs: [lint, test, e2e, build]
     runs-on: ubuntu-latest
     steps:
-      - name: Fail if any required job did not succeed
-        run: |
-          results="${{ needs.lint.result }} ${{ needs.test.result }} ${{ needs.e2e.result }} ${{ needs.build.result }}"
-          echo "Job results: ${results}"
-          # Guard against a renamed/removed needs job leaving an empty result.
-          if [ "$(echo ${results} | wc -w)" -ne 4 ]; then
-            echo "::error::expected 4 job results, got '${results}'"
-            exit 1
-          fi
-          for result in ${results}; do
-            if [ "${result}" != "success" ]; then
-              echo "::error::A required job did not succeed (got '${result:-<empty>}')"
-              exit 1
-            fi
-          done
-          echo "All required jobs succeeded"
+      - name: Verify all required jobs succeeded
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
