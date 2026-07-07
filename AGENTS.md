@@ -61,12 +61,20 @@ pnpm test:e2e             # full deploy against throwaway Docker containers
 
 ## Publishing
 
-`pnpm publish` does **not** choose the version (unlike the old `yarn publish`),
-so a release is two steps: **`pnpm version <patch|minor|major>`** (or an exact
-version) then **`pnpm ship`** — the bump type is the only thing that changes
-between patch/minor/major releases. `pnpm version` runs `pnpm test` via the
-`preversion` hook and **aborts the bump if tests fail** (no stranded version
-commit/tag); on success it bumps `package.json`, commits, and tags `vX.Y.Z`.
-`pnpm ship` then builds, `pnpm publish`es `dist/`, and `git push --follow-tags`
-pushes the commit + tag to `main` — allowed by the Ghost Foundation ruleset
-bypass (`always`).
+Releasing is one command: **`pnpm ship <patch|minor|major>`** (or an exact
+version, or no argument for the interactive picker). `ship` is
+[`@tryghost/pro-ship`](https://www.npmjs.com/package/@tryghost/pro-ship); the
+`preship` hook runs `pnpm test` first and **aborts before any git mutation if
+tests fail** (no stranded version commit/tag). On success `pro-ship` bumps
+`package.json`, commits and tags `vX.Y.Z`, and `git push --follow-tags`es to
+`main` — allowed by the Ghost Foundation ruleset bypass (`always`). `ship` does
+**not** publish locally (no `--publish` flag) — see below.
+
+**Publishing runs in CI, not on your machine.** `.github/workflows/publish.yml`
+triggers on any push to `main` that changes `package.json` and publishes to npm
+via **OIDC trusted publishing** — no npm token is stored. The pushed release
+commit is what fires it; the workflow skips (no-op) if that version is already
+on the registry, so non-release edits to `package.json` are safe. It runs
+`pnpm publish`, which builds `dist/` via `prepublishOnly` and ships only `dist`,
+with provenance attestation (public repo). A manual `workflow_dispatch` run is
+available and defaults to `--dry-run`.
