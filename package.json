@@ -21,15 +21,15 @@
     "test:unit": "vitest run --coverage",
     "test": "pnpm lint && pnpm typecheck && pnpm test:unit",
     "test:e2e": "docker compose -f test/e2e/docker-compose.yml up --build --abort-on-container-exit --exit-code-from runner",
-    "preversion": "pnpm test",
     "prepublishOnly": "pnpm build",
     "preship": "pnpm test",
-    "ship": "STATUS=$(git status --porcelain); echo $STATUS; if [ -z \"$STATUS\" ]; then pnpm publish && git push --follow-tags; fi"
+    "ship": "pro-ship"
   },
   "dependencies": {
     "shipit-cli": "5.3.0"
   },
   "devDependencies": {
+    "@tryghost/pro-ship": "1.1.5",
     "@types/node": "24.13.2",
     "@vitest/coverage-v8": "4.1.9",
     "oxfmt": "0.57.0",
