@@ -53,7 +53,7 @@ pnpm test:e2e             # full deploy against throwaway Docker containers
   _this_ repo's deps with pnpm, runs `pnpm build`, then Vitest against `dist/`)
   and a `target` (the deploy destination — it has npm, yarn, and pnpm available
   so all three runtime install paths can be exercised).
-- **The required status check is `All tests pass`** — an aggregator job that
+- **The required status check is `Required checks pass`** — an aggregator job that
   `needs: [lint, test, e2e, build]`. Add new required jobs to its `needs` (and to
   the result-count guard in the job), not to branch protection.
 - **pnpm consumers must not share `node_modules`.** pnpm can't install into a
