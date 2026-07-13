@@ -1,6 +1,6 @@
 {
   "name": "@tryghost/deploy",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "license": "MIT",
   "author": "Ghost Foundation",
   "repository": "https://github.com/TryGhost/Deploy",
