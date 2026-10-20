@@ -8,7 +8,7 @@ Install this package:
 
 `pnpm add @tryghost/deploy` (or `npm install @tryghost/deploy` / `yarn add @tryghost/deploy`)
 
-> Requires **Node.js >= 20.20.0** (CI also tests 22 and 24). Projects that still
+> Requires **Node.js >= 20.20.0** (CI also tests 22.22.0 and 24; deploy e2e uses 22.22.0). Projects that still
 > deploy from an older Node runtime must upgrade to 20.20.0+ before they can use
 > a current version of this package.
 
