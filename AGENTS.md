@@ -32,11 +32,11 @@ pnpm test:e2e             # full deploy against throwaway Docker containers
   (`prepublishOnly`), and inside the e2e runner. Don't edit or commit `dist`;
   change the `.ts` source and rebuild.
 - **Node 20.20.0 is a deliberate required floor — `engines: ">=20.20.0"`,
-  `.nvmrc`, CI matrix 20.20.0/22/24.** The Jenkins jobs run this plugin under a
-  per-project Node version (`jenkins-jobs/jobs/apps/projects.yaml`): Daisy.js,
-  Zuul, Stats-Service and the dispatchers on 20.20.0, Scheduler/UpdateCheck on
-  24 — **but Ghost-Rollout on 18.20.2 and elastic-alerting/AppMonitor on
-  14.18.1** (legacy Ubuntu 18.04 / glibc 2.27 infra that can't run Node 18+).
+  CI matrix 20.20.0/22.22.0/24.** Local development follows `.nvmrc`.
+  The Jenkins jobs run this plugin under a
+  per-project Node version (`jenkins-jobs/jobs/apps/projects.yaml`): Stats-Service
+  on 20.20.0, Daisy.js/Zuul/dispatchers on 22.22.0, Scheduler/UpdateCheck/elastic-alerting on
+  24 — **but Ghost-Rollout on 18.20.2 and AppMonitor on 14.18.1** (legacy Ubuntu 18.04 / glibc 2.27 infra that can't run Node 18+).
   We require 20.20.0 _anyway_: those sub-20 jobs will **fail to install a new
   version until the infra team upgrades them** (in progress) — a known, accepted
   tradeoff, not a bug. **Do not lower `engines` to "support" Node 14/18.**
@@ -49,7 +49,9 @@ pnpm test:e2e             # full deploy against throwaway Docker containers
 
 ## Gotchas
 
-- **e2e needs Docker running.** It builds two containers: a `runner` (installs
+- **e2e needs Docker running.** Both images pin Node 22.22.0 to match Daisy/Zuul
+  production; keep these and the exact CI leg protected in Renovate. It builds
+  two containers: a `runner` (installs
   _this_ repo's deps with pnpm, runs `pnpm build`, then Vitest against `dist/`)
   and a `target` (the deploy destination — it has npm, yarn, and pnpm available
   so all three runtime install paths can be exercised).
