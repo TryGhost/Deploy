@@ -44,10 +44,6 @@ pnpm test:e2e             # full deploy against throwaway Docker containers
   them** (in progress) — a known, accepted tradeoff, not a bug. **Do not lower
   `engines` to "support" Node 14/18.** Raise the floor only when no Jenkins job
   that can run this plugin is left below the new version.
-- **`pnpm` is held on the 10.x line** (`packageManager`, Renovate
-  `allowedVersions: '<11'`). pnpm 11 needs Node >= 22.13, which the 22.23.4
-  floor now satisfies, but the upgrade has not been done yet; move to 11 in its
-  own change, not as a side effect of a runtime bump.
 - **GitHub Actions must be pinned to full commit SHAs** (org policy rejects
   floating tags — every job fails in seconds otherwise). Keep the `# vX.Y.Z`
   comment next to each SHA.

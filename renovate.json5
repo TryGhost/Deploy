@@ -14,11 +14,6 @@
     ],
     packageRules: [
         {
-            description: 'Hold pnpm on 10.x until the pnpm 11 upgrade is done as its own change; the Node 22.23.4 floor already satisfies its Node 22.13 requirement.',
-            matchPackageNames: ['pnpm'],
-            allowedVersions: '<11',
-        },
-        {
             description: 'Keep CI runtime jobs pinned to Node 22.23.4; it is the engines floor and the exact Ghost(Pro) server runtime, so it must not drift to patch releases.',
             matchManagers: ['github-actions', 'custom.regex'],
             matchDepNames: ['node'],
