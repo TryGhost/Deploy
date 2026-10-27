@@ -31,26 +31,26 @@ pnpm test:e2e             # full deploy against throwaway Docker containers
   `dist/` is gitignored and built by `pnpm build` — in CI, before publish
   (`prepublishOnly`), and inside the e2e runner. Don't edit or commit `dist`;
   change the `.ts` source and rebuild.
-- **Node 20.20.0 is a deliberate required floor — `engines: ">=20.20.0"`,
-  CI matrix 20.20.0/22.22.0/24.** Local development follows `.nvmrc`.
+- **Node 22.23.4 is a deliberate required floor — `engines: ">=22.23.4"`,
+  CI matrix 22.23.4/24.** Local development follows `.nvmrc`.
   The Jenkins jobs run this plugin under a
-  per-project Node version (`jenkins-jobs/jobs/apps/projects.yaml`): Stats-Service
-  on 20.20.0, Daisy.js/Zuul/dispatchers on 22.22.0, Scheduler/UpdateCheck/elastic-alerting on
-  24 — **but Ghost-Rollout on 18.20.2 and AppMonitor on 14.18.1** (legacy Ubuntu 18.04 / glibc 2.27 infra that can't run Node 18+).
-  We require 20.20.0 _anyway_: those sub-20 jobs will **fail to install a new
-  version until the infra team upgrades them** (in progress) — a known, accepted
-  tradeoff, not a bug. **Do not lower `engines` to "support" Node 14/18.**
-- **`pnpm` is pinned to the 10.x line** (`packageManager`) on purpose — pnpm 11
-  requires Node >= 22.13 and would break the 20.20.0 CI leg. Don't bump it to 11
-  until the floor moves off Node 20.
+  per-project Node version (`jenkins-jobs/jobs/apps/projects.yaml`):
+  Daisy.js/Zuul/dispatchers/Stats-Service on 22.23.4 (the Ghost(Pro) server
+  runtime), Scheduler/UpdateCheck/elastic-alerting on 24 — **but Ghost-Rollout
+  on 18.20.2 and elasticsearch-query-exporter on 14.18.1** (legacy Ubuntu 18.04 /
+  glibc 2.27 infra that can't run Node 18+). We require 22.23.4 _anyway_: those sub-20
+  jobs will **fail to install a new version until the infra team upgrades
+  them** (in progress) — a known, accepted tradeoff, not a bug. **Do not lower
+  `engines` to "support" Node 14/18.** Raise the floor only when no Jenkins job
+  that can run this plugin is left below the new version.
 - **GitHub Actions must be pinned to full commit SHAs** (org policy rejects
   floating tags — every job fails in seconds otherwise). Keep the `# vX.Y.Z`
   comment next to each SHA.
 
 ## Gotchas
 
-- **e2e needs Docker running.** Both images pin Node 22.22.0 to match Daisy/Zuul
-  production; keep these and the exact CI leg protected in Renovate. It builds
+- **e2e needs Docker running.** Both images pin Node 22.23.4 to match the Ghost(Pro)
+  server runtime; keep these and the exact CI leg protected in Renovate. It builds
   two containers: a `runner` (installs
   _this_ repo's deps with pnpm, runs `pnpm build`, then Vitest against `dist/`)
   and a `target` (the deploy destination — it has npm, yarn, and pnpm available

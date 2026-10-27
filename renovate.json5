@@ -14,30 +14,18 @@
     ],
     packageRules: [
         {
-            description: 'Keep pnpm on 10.x while this repo supports Node 20.20.0; pnpm 11 requires Node 22.13 or newer.',
-            matchPackageNames: ['pnpm'],
-            allowedVersions: '<11',
-        },
-        {
-            description: 'Keep CI runtime jobs pinned to Node 20.20.0; this is the lowest consumer runtime and must not drift to patch releases.',
+            description: 'Keep CI runtime jobs pinned to Node 22.23.4; this is the lowest consumer runtime and must not drift to patch releases.',
             matchManagers: ['github-actions', 'custom.regex'],
             matchDepNames: ['node'],
-            matchCurrentValue: '20.20.0',
-            allowedVersions: '20.20.0',
+            matchCurrentValue: '22.23.4',
+            allowedVersions: '22.23.4',
         },
         {
-            description: 'Keep the Daisy/Zuul CI runtime pinned to the exact production version.',
-            matchManagers: ['github-actions', 'custom.regex'],
-            matchDepNames: ['node'],
-            matchCurrentValue: '22.22.0',
-            allowedVersions: '/^22\\.22\\.0$/',
-        },
-        {
-            description: 'Keep the deploy e2e runner and SSH target on the Daisy/Zuul production runtime.',
+            description: 'Keep the deploy e2e runner and SSH target on the Ghost(Pro) server runtime.',
             matchDatasources: ['docker'],
             matchPackageNames: ['node'],
             matchFileNames: ['test/e2e/**'],
-            allowedVersions: '/^22\\.22\\.0-bookworm$/',
+            allowedVersions: '/^22\\.23\\.4-bookworm$/',
         },
     ],
 }
