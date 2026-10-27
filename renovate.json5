@@ -14,11 +14,11 @@
     ],
     packageRules: [
         {
-            description: 'Keep CI runtime jobs pinned to Node 22.23.4; it is the engines floor and the exact Ghost(Pro) server runtime, so it must not drift to patch releases.',
+            description: 'Keep CI runtime jobs pinned to Node 22.23.4; this is the lowest consumer runtime and must not drift to patch releases.',
             matchManagers: ['github-actions', 'custom.regex'],
             matchDepNames: ['node'],
             matchCurrentValue: '22.23.4',
-            allowedVersions: '/^22\\.23\\.4$/',
+            allowedVersions: '22.23.4',
         },
         {
             description: 'Keep the deploy e2e runner and SSH target on the Ghost(Pro) server runtime.',
