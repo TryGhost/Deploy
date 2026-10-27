@@ -37,9 +37,8 @@ pnpm test:e2e             # full deploy against throwaway Docker containers
   per-project Node version (`jenkins-jobs/jobs/apps/projects.yaml`):
   Daisy.js/Zuul/dispatchers/Stats-Service on 22.23.4 (the Ghost(Pro) server
   runtime), Scheduler/UpdateCheck/elastic-alerting on 24 — **but Ghost-Rollout
-  on 18.20.2 and AppMonitor on 14.18.1** (legacy Ubuntu 18.04 / glibc 2.27 infra
-  that can't run Node 18+; galera-healthcheck and elasticsearch-query-exporter
-  are also still listed on 14.18.1). We require 22.23.4 _anyway_: those sub-20
+  on 18.20.2 and elasticsearch-query-exporter on 14.18.1** (legacy Ubuntu 18.04 /
+  glibc 2.27 infra that can't run Node 18+). We require 22.23.4 _anyway_: those sub-20
   jobs will **fail to install a new version until the infra team upgrades
   them** (in progress) — a known, accepted tradeoff, not a bug. **Do not lower
   `engines` to "support" Node 14/18.** Raise the floor only when no Jenkins job
