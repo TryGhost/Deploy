@@ -8,3 +8,13 @@
 # blocked by pnpm's secure default.
 allowBuilds:
   esbuild: true
+
+# Security overrides for transitive deps of shipit-cli@5.3.0 (latest release,
+# unmaintained). Dependabot alerts: micromatch@3 (ReDoS) drags in braces@2
+# (resource exhaustion) and decode-uri-component@0.2 (DoS) via snapdragon;
+# micromatch@4 drops both. ssh-pool pins tmp@0.1 (path traversal / symlink
+# write). The APIs used upstream (micromatch.matcher, tmp.tmpName) are
+# unchanged across these majors.
+overrides:
+  micromatch@<4.0.8: ^4.0.8
+  tmp@<0.2.6: ^0.2.6
