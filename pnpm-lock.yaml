@@ -184,8 +184,8 @@ importers:
         version: 5.3.0
     devDependencies:
       '@tryghost/pro-ship':
-        specifier: 1.1.9
-        version: 1.1.9
+        specifier: 2.0.4
+        version: 2.0.4
       '@types/node':
         specifier: 26.6.6
         version: 26.6.6
@@ -584,13 +584,13 @@ packages:
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
 
-  '@tryghost/pro-ship@1.1.9':
-    resolution: {integrity: sha512-2DvlpT5P7v8bOizXTtL7/Flmc9wAK3eycroxgMTQWlpFaVlXjmOnuOnFGEeT8JGAdY/F5kk9tLDmb+x43TXbJQ==}
-    engines: {node: '>=20.20.0'}
+  '@tryghost/pro-ship@2.0.4':
+    resolution: {integrity: sha512-tt6vcmI1m9ZyjhQ23FHDgQ6TmVzLqIWlw7PQ9nmOdce4iaW3RcxXZVIFnj90PvpmZdxX2j5Xl9KoMBOkqXwTxg==}
+    engines: {node: '>=22.12.0'}
     hasBin: true
 
-  '@tryghost/root-utils@2.3.14':
-    resolution: {integrity: sha512-VmHSaPdjTCQNOTNvpLTmphi+TdorWbGbjgqTeCYFPgsWw3XUlByWaERYe3PV2JOmd2XeAhpG2KCegrmnPWMlKA==}
+  '@tryghost/root-utils@2.4.0':
+    resolution: {integrity: sha512-Mil+TJ6eolD8lXgSiWScDgaDRA7ANbjfgHjEioP5CrebZJLM4PAfV94hzHl/Em7KA3fvDMWM5IhMku2JFBkNjw==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -1166,8 +1166,8 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
-  semver@7.8.5:
-    resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
+  semver@7.8.6:
+    resolution: {integrity: sha512-9lpSSU4Mly3mrtruwLs1eLK6+gzbzqeBFwRNjIjE+9LuDpWdYctrQlQ3ej1Ilgi7gknpsTRnPoLP8DpCHqHIJw==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -1534,12 +1534,12 @@ snapshots:
 
   '@rolldown/pluginutils@1.0.1': {}
 
-  '@tryghost/pro-ship@1.1.9':
+  '@tryghost/pro-ship@2.0.4':
     dependencies:
-      '@tryghost/root-utils': 2.3.14
-      semver: 7.8.5
+      '@tryghost/root-utils': 2.4.0
+      semver: 7.8.6
 
-  '@tryghost/root-utils@2.3.14':
+  '@tryghost/root-utils@2.4.0':
     dependencies:
       caller: 1.1.0
       find-root: 1.1.0
@@ -2041,7 +2041,7 @@ snapshots:
       '@rolldown/binding-win32-arm64-msvc': 1.2.16
       '@rolldown/binding-win32-x64-msvc': 1.2.16
 
-  semver@7.8.5: {}
+  semver@7.8.6: {}
 
   sequencify@0.0.7: {}
 
